@@ -1,25 +1,45 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import Graph from './components/Graph/Graph';
 
 function App() {
+
+  const [graph, setGraph] = useState(null)
+  const [unvisitedNodes, setUnvisitedNodes] = useState([])
+
+  const createGraph = () => {
+    let newGraph = []
+    for (let i = 0; i < 25; i++) {
+      let newRow = []
+      for (let j = 0; j < 25; j++) {
+        const newNode = i === 5 && j === 5 ? {
+          tentativeDistance: 0,
+          state: 1,
+          visited: false
+        } : {
+          tentativeDistance: Infinity,
+          state: 0,
+          visited: false
+        }
+        newRow.push(newNode)
+        setUnvisitedNodes([...unvisitedNodes, newNode])
+      }
+      newGraph.push(newRow)
+    }
+    setGraph(newGraph)
+  }
+
+  useEffect(() => {
+    createGraph()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App flex-container">
+      <Graph graph={graph} />
     </div>
   );
 }
 
 export default App;
+
+
