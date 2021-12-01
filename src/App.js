@@ -35,7 +35,12 @@ function App() {
 
   return (
     <div className="App flex-container">
-      <Graph graph={graph} />
+      <Graph 
+        unvisitedNodes={unvisitedNodes} 
+        setUnvisitedNodes={setUnvisitedNodes} 
+        graph={graph} 
+        setGraph={setGraph} 
+      />
     </div>
   );
 }
