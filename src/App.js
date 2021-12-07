@@ -6,9 +6,11 @@ function App() {
 
   const [graph, setGraph] = useState(null)
   const [unvisitedNodes, setUnvisitedNodes] = useState([])
+  // const unvisitedNodes = []
 
   const createGraph = () => {
-    let newGraph = []
+    const newGraph = []
+    const unvisitedNodesTemp = []
     for (let i = 0; i < 25; i++) {
       let newRow = []
       for (let j = 0; j < 25; j++) {
@@ -22,11 +24,18 @@ function App() {
           visited: false
         }
         newRow.push(newNode)
-        setUnvisitedNodes([...unvisitedNodes, newNode])
+        unvisitedNodesTemp.push(newNode)
+        // const newArray = [...unvisitedNodes]
+        // newArray.push(newNode)
+        // setUnvisitedNodes(newArray)
+        // console.log(newArray)
+        // setUnvisitedNodes([...unvisitedNodes, newNode])
       }
       newGraph.push(newRow)
     }
     setGraph(newGraph)
+    setUnvisitedNodes(unvisitedNodesTemp)
+    // console.log(unvisitedNodesTemp)
   }
 
   useEffect(() => {
@@ -36,8 +45,8 @@ function App() {
   return (
     <div className="App flex-container">
       <Graph 
-        unvisitedNodes={unvisitedNodes} 
-        setUnvisitedNodes={setUnvisitedNodes} 
+        // unvisitedNodes={unvisitedNodes} 
+        // setUnvisitedNodes={setUnvisitedNodes} 
         graph={graph} 
         setGraph={setGraph} 
       />

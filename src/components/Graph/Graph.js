@@ -1,34 +1,19 @@
 import './Graph.css'
 import Node from '../Node/Node'
 import { useState } from 'react/cjs/react.development'
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
-const Graph = (props) => {
+const Graph = ({graph, setGraph}) => {
 
     const [currentNode, setCurrentNode] = useState([5, 5])
 
-    const graph = props.graph
+    const [unvisitedNodesReferences, setUnvisitedNodesReferences] = useState([])
 
-    const incrementTentativeDistance = async (checkedNode, current) => {
-        await props.setGraph(props.graph.map((row, i) => {
+    const visitNode = (checkedNode, newDistance) => {
+        setGraph(graph.map((row, i) => {
             return row.map((node, j) => {
                 return checkedNode[0] === i && checkedNode[1] === j ? {
-                    tentativeDistance: graph[current[0]][current[1]].tentativeDistance + 1,
-                    state: node.state,
-                    visited: node.visited
-                } : node
-            })
-        }))
-    }
-
-    const changeToVisited = async (checkedNode) => {
-        await props.setGraph(props.graph.map((row, i) => {
-            return row.map((node, j) => {
-                if (checkedNode[0] === i && checkedNode[1] === j) {
-                    console.log(i, j)
-                }
-                return checkedNode[0] === i && checkedNode[1] === j ? {
-                    tentativeDistance: node.tentativeDistance,
+                    tentativeDistance: newDistance,
                     state: 4,
                     visited: true
                 } : node
@@ -38,56 +23,67 @@ const Graph = (props) => {
 
     const onClick = () => {
 
-        const up = graph[currentNode[0] - 1][currentNode[1]]
-        const down = graph[currentNode[0] + 1][currentNode[1]]
-        const left = graph[currentNode[0]][currentNode[1] - 1]
-        const right = graph[currentNode[0]][currentNode[1] + 1]
+        const up = graph[currentNode[0] - 1][currentNode[1]] ? graph[currentNode[0] - 1][currentNode[1]] : false
+        const down = graph[currentNode[0] + 1][currentNode[1]] ? graph[currentNode[0] + 1][currentNode[1]] : false
+        const left = graph[currentNode[0]][currentNode[1] - 1] ? graph[currentNode[0]][currentNode[1] - 1] : false
+        const right = graph[currentNode[0]][currentNode[1] + 1] ? graph[currentNode[0]][currentNode[1] + 1] : false
+
+        const newTentativeDistance = graph[currentNode[0]][currentNode[1]].tentativeDistance + 1
         
         // Checking Up
-        if (!up.visited) {
-            incrementTentativeDistance([currentNode[0] - 1, currentNode[1]], currentNode)
-            changeToVisited([currentNode[0] - 1, currentNode[1]])
-            // setCurrentNode([currentNode[0] - 1, currentNode[1]])
-            // if (!down.visited) {
-            //     incrementTentativeDistance([currentNode[0] + 1, currentNode[1]] , currentNode)
-            //     changeToVisited([currentNode[0] + 1, currentNode[1]])
-                console.log('HERE')
-            // }
+        if (up) {
+            if (graph[currentNode[0] - 1][currentNode[1]] && !graph[currentNode[0] - 1][currentNode[1]].visited && graph[currentNode[0] - 1][currentNode[1]].state !== 1 && graph[currentNode[0] - 1][currentNode[1]].state !== 3) {
+                // incrementTentativeDistance([currentNode[0] - 1, currentNode[1]], currentNode)
+                unvisitedNodesReferences.push([currentNode[0] - 1, currentNode[1]])
+                visitNode([currentNode[0] - 1, currentNode[1]], newTentativeDistance)
+            }
+            return
         }
 
         // Checking Down
-        else if (!down.visited) {
-            incrementTentativeDistance([currentNode[0] + 1, currentNode[1]] , currentNode)
-            changeToVisited([currentNode[0] + 1, currentNode[1]])
+        if (down) {
+            if (!graph[currentNode[0] + 1][currentNode[1]].visited && graph[currentNode[0] + 1][currentNode[1]].state !== 1 && graph[currentNode[0] + 1][currentNode[1]].state !== 3) {
+                // incrementTentativeDistance([currentNode[0] + 1, currentNode[1]] , currentNode)
+                unvisitedNodesReferences.push([currentNode[0] + 1, currentNode[1]])
+                visitNode([currentNode[0] + 1, currentNode[1]], newTentativeDistance)
+            }
+            return
         }
 
         // Checking Left
-        else if (!left.visited) {
-            incrementTentativeDistance([currentNode[0], currentNode[1] - 1], currentNode)
-            changeToVisited([currentNode[0], currentNode[1] - 1])
+        if (left) {
+            if (!graph[currentNode[0]][currentNode[1] - 1].visited && graph[currentNode[0]][currentNode[1] - 1].state !== 1 && graph[currentNode[0]][currentNode[1] - 1].state !== 3) {
+                // incrementTentativeDistance([currentNode[0], currentNode[1] - 1], currentNode)
+                unvisitedNodesReferences.push([currentNode[0], currentNode[1] - 1])
+                visitNode([currentNode[0], currentNode[1] - 1], newTentativeDistance)
+            }
+            return
         }
 
         // Checking Right
-        else if (!right.visited) {
-            incrementTentativeDistance([currentNode[0], currentNode[1] + 1], currentNode)
-            changeToVisited([currentNode[0], currentNode[1] + 1])
+        if (right) {
+            if (!graph[currentNode[0]][currentNode[1] + 1].visited && graph[currentNode[0]][currentNode[1] + 1].state !== 1 && graph[currentNode[0]][currentNode[1] + 1].state !== 3) {
+                // incrementTentativeDistance([currentNode[0], currentNode[1] + 1], currentNode)
+                unvisitedNodesReferences.push([currentNode[0], currentNode[1] + 1])
+                visitNode([currentNode[0], currentNode[1] + 1], newTentativeDistance)
+            }
+            return
         }
 
         else {
-            setCurrentNode()
+            setCurrentNode(unvisitedNodesReferences.shift())
         }
-
     }
 
     return (
         <div className="graph-container">
             <div className="graph">
                 {
-                    props.graph && props.graph.map((row, i) => {
+                    graph && graph.map((row, i) => {
                         return <div key={i} className="row flex-container">
                             {
                                 row.map((node, j) => {
-                                    return <Node rowIdx={i} nodeIdx={j} graph={props.graph} setGraph={props.setGraph} key={j} node={node} index={[i, j]} />
+                                    return <Node rowIdx={i} nodeIdx={j} graph={graph} setGraph={setGraph} key={j} node={node} index={[i, j]} />
                                 })
                             }
                         </div>
