@@ -23,6 +23,12 @@ const Graph = ({graph, setGraph}) => {
 
     const onClick = () => {
 
+        if (!graph[currentNode[0] - 1][currentNode[1]]) {
+            console.log(graph[currentNode[0] - 1][currentNode[1]])
+        }
+
+        // Stop it from here using math/numbers
+
         const up = graph[currentNode[0] - 1][currentNode[1]] ? graph[currentNode[0] - 1][currentNode[1]] : false
         const down = graph[currentNode[0] + 1][currentNode[1]] ? graph[currentNode[0] + 1][currentNode[1]] : false
         const left = graph[currentNode[0]][currentNode[1] - 1] ? graph[currentNode[0]][currentNode[1] - 1] : false
@@ -37,7 +43,6 @@ const Graph = ({graph, setGraph}) => {
                 unvisitedNodesReferences.push([currentNode[0] - 1, currentNode[1]])
                 visitNode([currentNode[0] - 1, currentNode[1]], newTentativeDistance)
             }
-            return
         }
 
         // Checking Down
@@ -47,7 +52,6 @@ const Graph = ({graph, setGraph}) => {
                 unvisitedNodesReferences.push([currentNode[0] + 1, currentNode[1]])
                 visitNode([currentNode[0] + 1, currentNode[1]], newTentativeDistance)
             }
-            return
         }
 
         // Checking Left
@@ -57,7 +61,6 @@ const Graph = ({graph, setGraph}) => {
                 unvisitedNodesReferences.push([currentNode[0], currentNode[1] - 1])
                 visitNode([currentNode[0], currentNode[1] - 1], newTentativeDistance)
             }
-            return
         }
 
         // Checking Right
@@ -67,10 +70,9 @@ const Graph = ({graph, setGraph}) => {
                 unvisitedNodesReferences.push([currentNode[0], currentNode[1] + 1])
                 visitNode([currentNode[0], currentNode[1] + 1], newTentativeDistance)
             }
-            return
         }
 
-        else {
+        if (up.visited && down.visited && left.visited && right.visited) {
             setCurrentNode(unvisitedNodesReferences.shift())
         }
     }

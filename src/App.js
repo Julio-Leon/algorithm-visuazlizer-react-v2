@@ -17,7 +17,7 @@ function App() {
         const newNode = i === 5 && j === 5 ? {
           tentativeDistance: 0,
           state: 1,
-          visited: false
+          visited: true
         } : {
           tentativeDistance: Infinity,
           state: 0,
