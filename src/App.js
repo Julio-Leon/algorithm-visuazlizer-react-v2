@@ -17,24 +17,37 @@ function App() {
         const newNode = i === 5 && j === 5 ? {
           tentativeDistance: 0,
           state: 1,
-          visited: true
+          visited: false
         } : {
           tentativeDistance: Infinity,
           state: 0,
           visited: false
         }
+        newNode.neighborghs = []
+        // Up Neighbor
+        if (i - 1 >= 0 && i - 1 < 25 && j >= 0 && j < 25) {
+          newNode.neighborghs.push([i - 1, j])
+        }
+        // Right Neighbor
+        if (i >= 0 && i < 25 && j + 1 >= 0 && j + 1 < 25) {
+          newNode.neighborghs.push([i, j + 1])
+        }
+        // Down Neighbor
+        if (i + 1 >= 0 && i + 1 < 25 && j >= 0 && j < 25) {
+          newNode.neighborghs.push([i + 1, j])
+        }
+        // Left Neighbor
+        if (i >= 0 && i < 25 && j - 1 >= 0 && j - 1 < 25) {
+          newNode.neighborghs.push([i, j - 1])
+        }
         newRow.push(newNode)
         unvisitedNodesTemp.push(newNode)
-        // const newArray = [...unvisitedNodes]
-        // newArray.push(newNode)
-        // setUnvisitedNodes(newArray)
-        // console.log(newArray)
-        // setUnvisitedNodes([...unvisitedNodes, newNode])
       }
       newGraph.push(newRow)
     }
     setGraph(newGraph)
     setUnvisitedNodes(unvisitedNodesTemp)
+    console.log(newGraph)
     // console.log(unvisitedNodesTemp)
   }
 
