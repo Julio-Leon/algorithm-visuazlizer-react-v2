@@ -6,6 +6,7 @@ function App() {
 
   const [graph, setGraph] = useState(null)
   const [unvisitedNodes, setUnvisitedNodes] = useState([])
+  const [graphState, setGraphState] = useState(0)
   // const unvisitedNodes = []
 
   const createGraph = () => {
